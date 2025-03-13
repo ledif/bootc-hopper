@@ -28,6 +28,8 @@ $ bootc-hopper list-images ublue-os/aurora
 - oci://ghcr.io/ublue-os/aurora-dx:stable
 
 # Manage source of images
-bootc-hopper remote add acme https://github.com/acme/bootc-images.git
+bootc-hopper remote add artifacthub https://artifacthub.io
+bootc-hopper remote add acme git@github.com:acme/bootc-images.git
+
 ```
 
