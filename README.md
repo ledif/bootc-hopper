@@ -1,4 +1,5 @@
-
+> [!IMPORTANT]  
+> This project is in pre-alpha. Most features (including the GUI) are not implemented.
 
 A Flatpak GUI and command-line application that allows users to rebase to entirely different OS images.
 
