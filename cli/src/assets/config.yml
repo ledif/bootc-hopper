@@ -1,0 +1,25 @@
+version: 1
+
+# Merge behavior for applying properties
+# Options are:
+#   - soft:  Only change properties if they are set to their default values.
+#            This is the default behavior as it preserves changes to properties
+#            that users have manually configured.
+#   - hard:  Change all properties not explicitly excluded
+#   - force: Change all propertiess
+merge: "soft"
+
+# List of properties to exclude when applying profiles. Each entry is a
+# regular expression on the fully qualified name of the property
+#
+# Example:
+#   exclude:
+#     - "^xsettings/Net/ThemeName$" # Specific property
+#     - "^xsettings/Net"            # Everything starting with /Net in the xsettings channel
+#     - "^xfwm4"                    # Everything in the xfwm4 channel
+#     - "mycustomname"              # Everything containing the string "mycustomname"
+exclude: []
+
+# Enable or disable the sync feature that winblues uses on login
+sync:
+  auto: true
