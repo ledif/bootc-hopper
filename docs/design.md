@@ -44,3 +44,10 @@ The `land` command will do the following:
 - If not, a new user will be created with the same passwd as the user that started the hop
 - The `/var/opt/bootc-hopper/var/hop-state.yml` file will be removed
 - The systemd service will be disabled
+
+## Image Repo
+- Try to use Artifacthub if possible
+- Define a remote for images called "Pond"
+  - A git repo with a pond.yml in its root
+  - Organization / Product Line / Product
+    - For example, Universal Blue / Bazzite / bazzite-deck
