@@ -20,27 +20,38 @@ bootc-hopper remote add acme https://github.com/acme/bootc-images.git
 ```
 
 ### Hop Implementation
-Maybe use https://systemd.io/PORTABLE_SERVICES/
 
-The hop command will call `bootc switch` or `rpm-ostree rebase` to the new image.
+The hop command will essentially call `bootc switch` or `rpm-ostree rebase` to the new image with a prologue and epilogue.
 
-After a rebase is finished, it will do the following:
-- If the currently booted image is bootc-hopper aware, scripts in `/usr/share/bootc-hopper/hop.d/` will be executed
-- A file named `/var/opt/bootc-hopper/var/hop-state.yml` will be created
+Before the rebase starts:
+- Copy the currently running `bootc-hopper` executable to `/var/opt/bootc-hopper/bin/bootc-hopper`
+
+After a rebase is finished:
+- If the currently booted image is bootc-hopper aware, scripts in `/usr/lib/bootc-hopper/hop.d/` will be executed
+- Create a file named `/var/opt/bootc-hopper/var/hop-state.yml` with information about the current deployment and future deployment
 
 In addition, a systemd service will be created and enabled for next boot
+
+
+```
+# /etc/systemd/system/bootc-hopper-land.service
+[Unit]
+Exec=/var/opt/bootc-hopper/bin/bootc-hopper land
+ConditionFileExists=/var/opt/bootc-hopper/var/hop-state.yml
+
+[Install]
+WantedBy=multi-user.target
+```
+and
+
 ```bash
 systemctl enable bootc-hopper-land.service
 ```
 
-```
-[Unit]
-Exec=/var/opt/bootc-hopper/bin/bootc-hopper land
-ConditionFileExists=/var/opt/bootc-hopper/var/hop-state.yml
-```
+### Land Implementation
 
 The `land` command will do the following:
-- If the new image is bootc-hopper aware, scripts in `/usr/share/bootc-hopper/land.d/` will be executed
+- If the new image is bootc-hopper aware, scripts in `/usr/lib/bootc-hopper/land.d/` will be executed
 - If not, a new user will be created with the same passwd as the user that started the hop
 - The `/var/opt/bootc-hopper/var/hop-state.yml` file will be removed
 - The systemd service will be disabled
