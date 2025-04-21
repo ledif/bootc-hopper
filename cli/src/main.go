@@ -14,14 +14,23 @@ var (
 	date    = "unknown"
 )
 
+
 func hopCmd(cfg *Config) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "hop [container]",
 		Short: "Hop to the specified image",
 		Args:  cobra.ExactArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
+			imageRef := args[0]
 
-			fmt.Fprintf(os.Stderr, "hopping to: %v\n", args[0])
+			fmt.Fprintf(os.Stderr, "Hopping to: %v\n", imageRef)
+			err := hop(imageRef)
+			if err != nil {
+				fmt.Fprintf(os.Stderr, "Failed to hop: %v\n", err)
+				os.Exit(1)
+			} else {
+				fmt.Fprintf(os.Stderr, "Hop succeeded! System will switch to %v on next boot.\n", imageRef)
+			}
 		},
 	}
 
