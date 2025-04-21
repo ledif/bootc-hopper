@@ -8,7 +8,7 @@ bootc-hopper hop https://example.com/images/custom-image/Containerfile
 bootc-hopper hop /path/to/Containerfile
 
 # Fix up environment in new deployment (meant to be run automatically on next boot)
-#  - will run scripts in /usr/share/bootc-hopper/land.d/*
+#  - will run scripts in /usr/lib/bootc-hopper/land.d/*
 #  - or generic fix up scripts if path does not exist
 bootc-hopper land
 
@@ -35,7 +35,7 @@ HomeStrategy = "BestEffort"
 
 After a rebase is finished:
 - Execute scripts in `/usr/lib/bootc-hopper/hop.d/` if they exist
-- Create a file named `/var/lib/bootc-hopper/hop-state.yml` with information about the current deployment and future deployment
+- Create a file named `/var/lib/bootc-hopper/hop-state.toml` with information about the current deployment and future deployment
   - Current deployment information will include parsed configuration from `hop.conf`/`hop.conf.d`.
 
 In addition, a systemd service will be created and enabled for next boot
