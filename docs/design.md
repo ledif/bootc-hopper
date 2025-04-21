@@ -29,8 +29,10 @@ Before the rebase starts:
 
 Example configuration:
 ```toml
-DesktopEnvironment = "Plasma"
-HomeStrategy = "BestEffort"
+DesktopEnvironment = "plasma"  # default is autodetect
+HomeStrategy = "BestEffort"    # default is "NewUser"
+MigrationGroup = "wheel"       # default is wheel
+MigrationUser = "alice"        # default is null
 ```
 
 After a rebase is finished:
