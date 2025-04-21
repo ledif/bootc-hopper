@@ -29,10 +29,19 @@ Before the rebase starts:
 
 Example configuration:
 ```toml
-DesktopEnvironment = "plasma"  # default is autodetect
-HomeStrategy = "BestEffort"    # default is "NewUser"
-MigrationGroup = "wheel"       # default is wheel
-MigrationUser = "alice"        # default is null
+# The desktop environment of the booted image. Available options:
+#   - autodetect, plasma, gnome, xfce
+dektop_environment = "autodetect"
+# How to handle DE-specific configurations in the user's home directory
+# Options:
+#  - new_user: Create a new user on boot into the new image
+#  - best_effort: Attempt to remove DE-specific configs from the user's home directory
+#  - none: Do not modify any of the user's files
+migration_strategy = "new_user"
+# Comma separated list of groups for whom all users in that group will be migrated
+migration_group = "wheel"
+# Comma separated list of users to migrate
+migration_user = ""
 ```
 
 After a rebase is finished:
