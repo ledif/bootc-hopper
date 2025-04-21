@@ -21,14 +21,22 @@ bootc-hopper remote add acme https://github.com/acme/bootc-images.git
 
 ### Hop Implementation
 
-The hop command will essentially call `bootc switch` or `rpm-ostree rebase` to the new image with a prologue and epilogue.
+The hop command will call `bootc switch` to the new image with a prologue and epilogue.
 
 Before the rebase starts:
 - Copy the currently running `bootc-hopper` executable to `/var/lib/bootc-hopper/libexec/bootc-hopper`
+- Parse the configuration files in `/usr/lib/bootc-hopper/hop.conf` and `/usr/lib/bootc-hopper/hop.conf.d/` if they exist
+
+Example configuration:
+```toml
+DesktopEnvironment=Plasma
+HomeStrategy=BestEffort
+```
 
 After a rebase is finished:
-- If the currently booted image is bootc-hopper aware, scripts in `/usr/lib/bootc-hopper/hop.d/` will be executed
+- Execute scripts in `/usr/lib/bootc-hopper/hop.d/` if they exist
 - Create a file named `/var/lib/bootc-hopper/hop-state.yml` with information about the current deployment and future deployment
+  - Current deployment information will include parsed configuration from `hop.conf`/`hop.conf.d`.
 
 In addition, a systemd service will be created and enabled for next boot
 
@@ -36,7 +44,7 @@ In addition, a systemd service will be created and enabled for next boot
 # /etc/systemd/system/bootc-hopper-land.service
 [Unit]
 Exec=/var/opt/bootc-hopper/bin/bootc-hopper land
-ConditionFileExists=/var/lib/bootc-hopper/hop-state.yml
+ConditionFileExists=/var/lib/bootc-hopper/hop-state.toml
 
 [Install]
 WantedBy=multi-user.target
@@ -50,9 +58,12 @@ systemctl enable bootc-hopper-land.service
 ### Land Implementation
 
 The `land` command will do the following:
-- If the new image is bootc-hopper aware, scripts in `/usr/lib/bootc-hopper/land.d/` will be executed
-- If not, a new user will be created with the same passwd as the user that started the hop
-- The `/var/lib/bootc-hopper/hop-state.yml` file will be removed
+- Parse the configuration files in `/usr/lib/bootc-hopper/land.conf` and `/usr/lib/bootc-hopper/land.conf.d/` if they exist
+- Execute built-in functions based on combination of hop configuration (saved in `hop-state.toml`) and land configuration 
+   - `HomeStrategy=NewUser`: a new user will be created with the same passwd as the user that started the hop
+   - `HomeStrategy=BestEffort`: based on the desktop environment, try to remove all known configuration files in the directory of the user that started the hop
+- Execute scripts in `/usr/lib/bootc-hopper/land.d/` if they exist
+- The `/var/lib/bootc-hopper/hop-state.toml` file will be removed
 - The systemd service will be disabled
 - The database at `/var/lib/bootc-hopper/history.sqlite` will be updated with information about the hop
 
