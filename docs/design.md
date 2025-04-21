@@ -29,8 +29,8 @@ Before the rebase starts:
 
 Example configuration:
 ```toml
-DesktopEnvironment=Plasma
-HomeStrategy=BestEffort
+DesktopEnvironment = "Plasma"
+HomeStrategy = "BestEffort"
 ```
 
 After a rebase is finished:
